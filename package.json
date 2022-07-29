@@ -20,6 +20,6 @@
   },
   "homepage": "https://github.com/gnorzea/team_profile_generator#readme",
   "devDependencies": {
-    "jest": "^28.1.0"
+    "jest": "^28.1.3"
   }
 }
