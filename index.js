@@ -1,60 +1,57 @@
-import { writeFileSync } from "fs";
-import { prompt } from "inquirer";
+const fs = require('fs');
+const inquirer = require('inquirer');
+const Manager = require('./lib/Manager')
+const Engineer = require('./lib/Engineer')
+const Intern = require('./lib/Intern')
 
-import Manager from "./lib/Manager";
-import Engineer from "./lib/Engineer";
-import Intern from "./lib/Intern";
-
-import generateRoster from "./src/html-template";
-const rosterArray = [];
+const newPage = require('././src/page_template')
+const teamData = [];
 
 
 const teamQuestions = async () => {
-  const answers = await prompt([
+  const answers = await inquirer.prompt([
     {
       type: "input",
-      message: "What is the team member's name?",
       name: "name",
-      validate: (nameInput) => {
-        if (nameInput) {
+      message: "What is the team member's name?",
+      validate: (input) => {
+        if (input !== "") {
           return true;
         } else {
-          console.log("Please enter a team member's name");
-          return false;
+          return "You must enter a name";
         }
       },
     },
     {
       type: "input",
-      message: "What is the team member's ID number?",
       name: "id",
-      validate: (nameInput) => {
-        if (isNaN(nameInput)) {
-          console.log("Invalid input, please enter team member's ID");
-          return false;
-        } else {
+      message: "What is the team member's ID number?",
+      validate: (input) => {
+        if (isNaN(input)) {
           return true;
+        } else {
+          return "You must enter an ID (numeric values only)"
         }
       },
     },
     {
       type: "input",
-      message: "What is the team member's email?",
       name: "email",
+      message: "What is the team member's email?",
       validate: (email) => {
         valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
         if (valid) {
           return true;
         } else {
-          console.log("Please enter a valid email");
-          return false;
+    
+          return "Please enter a valid email"
         }
       },
     },
     {
       type: "list",
-      message: "What is the team member's role?",
       name: "role",
+      message: "What is the team member's role?",
       choices: ["Engineer", "Intern", "Manager"],
     },
   ]);
@@ -64,14 +61,13 @@ const teamQuestions = async () => {
     const managerRole = await prompt([
       {
         type: "input",
-        message: "What is the Manager's office number",
         name: "officeNumber",
+        message: "What is the Manager's office number",
         validate: (nameInput) => {
           if (isNaN(nameInput)) {
-            console.log("Please enter an office number");
-            return false;
-          } else {
             return true;
+          } else {
+            return "Please enter an office number";
           }
         },
       },
@@ -89,13 +85,13 @@ const teamQuestions = async () => {
     const engineerRole = await prompt([
       {
         type: "input",
-        message: "What is the employee's GitHub user name?",
         name: "github",
+        message: "What is the employee's GitHub user name?",
         validate: (nameInput) => {
           if (nameInput) {
             return true;
           } else {
-            console.log("Enter a valid GitHub Username");
+            return "Enter a GitHub Username";
           }
         },
       },
@@ -113,8 +109,8 @@ const teamQuestions = async () => {
     const internRole = await prompt([
       {
         type: "input",
-        message: "What university did the Intern attend?",
         name: "school",
+        message: "What university did the Intern attend?",
         validate: (nameInput) => {
           if (nameInput) {
             return true;
